@@ -3,7 +3,7 @@
 **Why?**  
 I hate when I delete a category on a Discord server, and all the channels move up instead of being deleted. So, I made this bot to remove those channels automatically.  
 
-![OrphanesKiller](OrphanesKiller.webp)
+
 
 
 ### **What It Does**  
