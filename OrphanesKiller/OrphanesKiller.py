@@ -48,14 +48,25 @@ async def delete_uncategorized_channels(guild):
     return response if response else "✅ No uncategorized channels found."
 
 
+# Ensure only users with the Administrator permission can run cleanup
 @bot.command(name="cleanup")
+@commands.has_permissions(administrator=True)
 async def cleanup(ctx):
     result = await delete_uncategorized_channels(ctx.guild)
     await ctx.send(result)
 
 
+@cleanup.error
+async def cleanup_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("❌ You need **Administrator** permissions to run this command.")
+
+
 @bot.tree.command(name="cleanup", description="Deletes all orphaned text and voice channels.")
 async def cleanup_slash(interaction: discord.Interaction):
+    if not interaction.user.guild_permissions.administrator:
+        await interaction.response.send_message("❌ You need **Administrator** permissions to run this command.", ephemeral=True)
+        return
     result = await delete_uncategorized_channels(interaction.guild)
     await interaction.response.send_message(result, ephemeral=True)
 
